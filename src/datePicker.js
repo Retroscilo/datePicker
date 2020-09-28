@@ -78,7 +78,6 @@ class DatePicker extends HTMLElement {
   }
 
   openModal = () => {
-    console.log(dateFormater.formatEn(this.startDate), this.startDate)
     this.shadowRoot.getElementById('modal').classList.add('--is-open');
 
     // Long date format when opening modal
@@ -86,11 +85,9 @@ class DatePicker extends HTMLElement {
       this.shadowRoot.getElementById('selectedDate').innerHTML = dateFormater.formatFrLong(new Date(dateFormater.formatEn(this.startDate)));
     }, 200);
     
-
     // Events to close modal
     document.addEventListener('click', this.closeModal);
     document.addEventListener('keydown', this.closeModal);
-    
   }
 
   closeModal = (e) => {
@@ -102,11 +99,14 @@ class DatePicker extends HTMLElement {
         this.shadowRoot.getElementById('selectedDate').innerHTML = dateFormater.formatFr(new Date(dateFormater.formatEn(this.startDate)));
       }, 200);
       
-
       // Clean events
       document.removeEventListener('click', this.closeModal);
       document.removeEventListener('keydown', this.closeModal);
     }
+  }
+
+  renderDays = (month) => {
+    this.shadowRoot.getElementById('dayContainer')
   }
 }
 

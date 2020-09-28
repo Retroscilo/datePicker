@@ -17,7 +17,6 @@
       font-size: 1rem;
     }
   </style>
-  
 <template id="template">
   <style>
     * {
@@ -30,10 +29,11 @@
       height: fit-content;
       text-align: center;
       padding: 10px 20px;
+      opacity: 0.99;
     }
 
     #selectedDate {
-      z-index: 2;
+      z-index: 3;
       position: relative;
       pointer-events: none;
     }
@@ -44,12 +44,14 @@
       width: 100%;
       height: 100%;
       top: 0; left: 0;
-      transition: box-shadow 0.1s, width 0.2s ease-in-out 0.1s, height 0.2s ease-in-out 0.1s, transform 0.2s ease-in-out 0.1s;
+      transition: all 0.2s ease-in-out;
+      transition-delay: width 0.1s, height 0.1s, border-radius 0.1s;
       border: 1px solid lightgrey;
       border-radius: 3px;
       display: flex;
       flex-direction: column;
       align-items: center;
+      z-index: 2;
     }
 
     #modal:hover {
@@ -71,17 +73,50 @@
 
     #modal.--is-open:hover {
       background: white;
+      cursor: initial;
+    }
+
+    #modal:not(.--is-open) > * {
+      visibility: hidden;
     }
 
     .arrow {
       position: absolute;
+      width: 25px;
+      height: 30px;
+      z-index: 1;
+      transition: all 0.2s;
+      top: 50%;
+      width: 15px; height: 15px;
+      transform: translateY(-50%);
+    }
+
+    #leftArrow {
+      left: 3px;
+      background: center/contain no-repeat url('data:image/svg+xml, <svg width="22" height="36" viewBox="0 0 22 36" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17.674 0L0 18.0034H0.0415868L17.7089 36H22V34.3782L5.62588 17.9966H5.59772L21.9651 1.62182V0H17.674Z" fill="black"/></svg>');
+    }
+
+    #leftArrow:hover {
+      cursor: pointer;
+      background-position: left;
+    }
+
+    #rightArrow {
+      right: 3px;
+      background: center/contain no-repeat url('data:image/svg+xml, <svg width="22" height="36" viewBox="0 0 22 36" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.326 36L22 17.9966H21.9584L4.29107 0H-1.90735e-06V1.62181L16.3741 18.0034H16.4023L0.0349274 34.3782V36H4.326Z" fill="black"/></svg>');
+    }
+
+    #rightArrow:hover {
+      cursor: pointer;
+      background-position: right;
     }
 
   </style>
   <div id="selectedDate"></div>
-  <div id="modal">
+  <div id="modal" class='--is-open'>
     <div class="arrow" id="leftArrow"></div>
     <div class="arrow" id="rightArrow"></div>
+    <div id="weekContainer"></div>
     <div id="dayContainer"></div>
   </div>
 </template>
