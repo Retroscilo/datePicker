@@ -1,4 +1,4 @@
-'mode strict'
+"use strict";
 
 let dateFormater = {
   Week: {
@@ -39,9 +39,9 @@ let dateFormater = {
 
   formatEn(string) {
     let array = string.split('/');
-    year = array[2];
-    month = array[1];
-    day = array[0];
+    let year = array[2];
+    let month = array[1];
+    let day = array[0];
     return [month, day, year].join('/');
   },
 
@@ -137,7 +137,7 @@ class DatePicker extends HTMLElement {
 
   selectDate = (e) => { 
     this.shadowRoot.querySelectorAll('.selected')
-    newDay = e.target.innerHTML;
+    let newDay = e.target.innerHTML;
     this.setAttribute('date', [("0" + newDay).slice(-2), ("0" + this.month).slice(-2), this.year].join('/'));
     this.closeModal(e);
   }
