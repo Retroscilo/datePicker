@@ -70,6 +70,7 @@ class DatePicker extends HTMLElement {
     const template = document.importNode(document.getElementById('template').content, true);
     root.appendChild(template);
     this.selectedDate = this.getAttribute('date') ?? dateFormater.formatFr(new Date());
+    if(this.selectedDate.length != 10) throw new Error("Verifiez le format de la date => doit être 'jj/mm/aaaa'")
   }
 
   get day() {
