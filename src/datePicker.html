@@ -72,7 +72,7 @@
         border-radius: 8px;
         z-index: 4;
         width: 30ex;
-        height: 40ex;
+        height: 33ex;
         left: -55px;
       }
 
@@ -83,14 +83,13 @@
 
       .arrow {
         position: absolute;
-        width: 25px;
-        height: 30px;
         z-index: 1;
         transition: all 0.2s;
         top: 60%;
         width: 1.8ex;
         height: 1.8ex;
         transform: translateY(-50%);
+        animation: fadeIn 0.3s ease-in-out forwards;
       }
 
       #leftArrow {
@@ -120,6 +119,7 @@
         padding: 0 3.9ex;
         margin-top: 1.5ex;
         color: darkgrey;
+        animation: fadeIn 0.3s ease-in-out forwards;
       }
 
       #dayContainer {
@@ -133,14 +133,15 @@
       }
 
       #dayContainer span {
-        width: 3.5ex;
-        height: 3.5ex;
+        width: 3ex;
+        height: 3ex;
         transition: all 0.1s;
         border: none;
         display: flex;
         justify-content: center;
         align-items: center;
         border-radius: 50%;
+        animation: fadeIn 0.3s ease-in-out forwards;
       }
 
       #dayContainer span.selectable:hover {
@@ -153,16 +154,25 @@
         background: royalblue;
         color: white;
       }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
     </style>
     
-    <div id="modal">
+    <div id="modal" aria-label="open">
       <div id="selectedDate"></div>
       <div id="content"></div>
     </div>
   </template>
   <template id="modal-content">
-    <div class="arrow" id="leftArrow"></div>
-      <div class="arrow" id="rightArrow"></div>
+    <div class="arrow" id="leftArrow" aria-label="previous month"></div>
+      <div class="arrow" id="rightArrow" aria-label="next month"></div>
       <div id="weekContainer">
         <span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span><span>D</span>
       </div>
