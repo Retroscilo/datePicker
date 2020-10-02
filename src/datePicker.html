@@ -1,187 +1,160 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-
-<body>
+<template id="template">
   <style>
-    @import 'normalize.css';
+    * {
+      box-sizing: border-box;
+    }
 
-    body {
-      height: 100vh;
-      align-items: center;
-      justify-content: space-around;
+    :host {
+      display: inline-block;
+      position: relative;
+      text-align: center;
+      top: -2.5ex;
+      width: 13ex;
+    }
+
+    #selectedDate {
+      z-index: 3;
+      position: relative;
+      pointer-events: none;
+    }
+
+    #modal {
+      position: absolute;
+      background: white;
+      top: 0;
+      left: 0;
+      transition: width 0.2s ease-in-out, height 0.2s ease-in-out, box-shadow 0.1s ease-in-out, left 0.2s ease-in-out;
+      transition-property: width, height, box-shadow, left;
+      transition-delay: 0.1s, 0.1s, 0s, 0.1s;
+      border: 1px solid lightgrey;
+      border-radius: 3px;
+      display: flex;
       flex-direction: column;
-      font-size: 1rem;
+      align-items: center;
+      z-index: 2;
+      width: 13ex;
+      height: 4ex;
+      padding: 0.6ex 0;
+    }
+
+    #modal:hover {
+      cursor: pointer;
+      box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    #modal:active {
+      box-shadow: none;
+    }
+
+    #modal.--is-open {
+      box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      z-index: 4;
+      width: 30ex;
+      height: 33ex;
+      left: -55px;
+    }
+
+    #modal.--is-open:hover {
+      background: white;
+      cursor: initial;
+    }
+
+    .arrow {
+      position: absolute;
+      z-index: 1;
+      transition: all 0.2s;
+      top: 60%;
+      width: 1.8ex;
+      height: 1.8ex;
+      transform: translateY(-50%);
+      animation: fadeIn 0.3s ease-in-out forwards;
+    }
+
+    #leftArrow {
+      left: 3px;
+      background: center/contain no-repeat url('data:image/svg+xml, <svg width="22" height="36" viewBox="0 0 22 36" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17.674 0L0 18.0034H0.0415868L17.7089 36H22V34.3782L5.62588 17.9966H5.59772L21.9651 1.62182V0H17.674Z" fill="black"/></svg>');
+    }
+
+    #leftArrow:hover {
+      cursor: pointer;
+      background-position: left;
+    }
+
+    #rightArrow {
+      right: 3px;
+      background: center/contain no-repeat url('data:image/svg+xml, <svg width="22" height="36" viewBox="0 0 22 36" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.326 36L22 17.9966H21.9584L4.29107 0H-1.90735e-06V1.62181L16.3741 18.0034H16.4023L0.0349274 34.3782V36H4.326Z" fill="black"/></svg>');
+    }
+
+    #rightArrow:hover {
+      cursor: pointer;
+      background-position: right;
+    }
+
+    #weekContainer {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 3.9ex;
+      margin-top: 1.5ex;
+      color: darkgrey;
+      animation: fadeIn 0.3s ease-in-out forwards;
+    }
+
+    #dayContainer {
+      display: flex;
+      padding: 0 3ex;
+      flex-wrap: wrap;
+      height: 100%;
+      margin-top: 1.5ex;
+      justify-content: space-between;
+
+    }
+
+    #dayContainer span {
+      width: 3ex;
+      height: 3ex;
+      transition: all 0.1s;
+      border: none;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%;
+      animation: fadeIn 0.3s ease-in-out forwards;
+    }
+
+    #dayContainer span.selectable:hover {
+      cursor: pointer;
+      background: royalblue;
+      color: white;
+    }
+
+    .selected {
+      background: royalblue;
+      color: white;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
     }
   </style>
-  <template id="template">
-    <style>
-      * {
-        box-sizing: border-box;
-      }
 
-      :host {
-        display: inline-block;
-        position: relative;
-        text-align: center;
-        top: -2.5ex;
-        width: 13ex;
-      }
-
-      #selectedDate {
-        z-index: 3;
-        position: relative;
-        pointer-events: none;
-      }
-
-      #modal {
-        position: absolute;
-        background: white;
-        top: 0;
-        left: 0;
-        transition: width 0.2s ease-in-out, height 0.2s ease-in-out, box-shadow 0.1s ease-in-out, left 0.2s ease-in-out;
-        transition-property: width, height, box-shadow, left;
-        transition-delay: 0.1s, 0.1s, 0s, 0.1s;
-        border: 1px solid lightgrey;
-        border-radius: 3px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        z-index: 2;
-        width: 13ex;
-        height: 4ex;
-        padding: 0.6ex 0;
-      }
-
-      #modal:hover {
-        cursor: pointer;
-        box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
-      }
-
-      #modal:active {
-        box-shadow: none;
-      }
-
-      #modal.--is-open {
-        box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.1);
-        border-radius: 8px;
-        z-index: 4;
-        width: 30ex;
-        height: 33ex;
-        left: -55px;
-      }
-
-      #modal.--is-open:hover {
-        background: white;
-        cursor: initial;
-      }
-
-      .arrow {
-        position: absolute;
-        z-index: 1;
-        transition: all 0.2s;
-        top: 60%;
-        width: 1.8ex;
-        height: 1.8ex;
-        transform: translateY(-50%);
-        animation: fadeIn 0.3s ease-in-out forwards;
-      }
-
-      #leftArrow {
-        left: 3px;
-        background: center/contain no-repeat url('data:image/svg+xml, <svg width="22" height="36" viewBox="0 0 22 36" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17.674 0L0 18.0034H0.0415868L17.7089 36H22V34.3782L5.62588 17.9966H5.59772L21.9651 1.62182V0H17.674Z" fill="black"/></svg>');
-      }
-
-      #leftArrow:hover {
-        cursor: pointer;
-        background-position: left;
-      }
-
-      #rightArrow {
-        right: 3px;
-        background: center/contain no-repeat url('data:image/svg+xml, <svg width="22" height="36" viewBox="0 0 22 36" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.326 36L22 17.9966H21.9584L4.29107 0H-1.90735e-06V1.62181L16.3741 18.0034H16.4023L0.0349274 34.3782V36H4.326Z" fill="black"/></svg>');
-      }
-
-      #rightArrow:hover {
-        cursor: pointer;
-        background-position: right;
-      }
-
-      #weekContainer {
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-        padding: 0 3.9ex;
-        margin-top: 1.5ex;
-        color: darkgrey;
-        animation: fadeIn 0.3s ease-in-out forwards;
-      }
-
-      #dayContainer {
-        display: flex;
-        padding: 0 3ex;
-        flex-wrap: wrap;
-        height: 100%;
-        margin-top: 1.5ex;
-        justify-content: space-between;
-        
-      }
-
-      #dayContainer span {
-        width: 3ex;
-        height: 3ex;
-        transition: all 0.1s;
-        border: none;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border-radius: 50%;
-        animation: fadeIn 0.3s ease-in-out forwards;
-      }
-
-      #dayContainer span.selectable:hover {
-        cursor: pointer;
-        background: royalblue;
-        color: white;
-      }
-
-      .selected {
-        background: royalblue;
-        color: white;
-      }
-
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-        }
-        to {
-          opacity: 1;
-        }
-      }
-    </style>
-    
-    <div id="modal" aria-label="open">
-      <div id="selectedDate"></div>
-      <div id="content"></div>
-    </div>
-  </template>
-  <template id="modal-content">
-    <div class="arrow" id="leftArrow" aria-label="previous month"></div>
-      <div class="arrow" id="rightArrow" aria-label="next month"></div>
-      <div id="weekContainer">
-        <span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span><span>D</span>
-      </div>
-    <div id="dayContainer"></div>
-  </template>
-Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consectetur sequi sunt, nostrum repellat ea voluptates tenetur. Expedita quos facere iusto rerum minima, nemo obcaecati consequuntur? Quos natus doloribus quia sapiente!
-  <date-picker date=24/12/2020></date-picker> Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto officiis est, aliquid velit saepe ipsum dolor necessitatibus eveniet aspernatur magni dignissimos error laboriosam vitae sit quas? Assumenda rem voluptates velit?
-  <date-picker></date-picker>
-  <script src="datePicker.js"></script>
-</body>
-
-</html>
+  <div id="modal" aria-label="open">
+    <div id="selectedDate"></div>
+    <div id="content"></div>
+  </div>
+</template>
+<template id="modal-content">
+  <div class="arrow" id="leftArrow" aria-label="previous month"></div>
+  <div class="arrow" id="rightArrow" aria-label="next month"></div>
+  <div id="weekContainer">
+    <span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span><span>D</span>
+  </div>
+  <div id="dayContainer"></div>
+</template>
